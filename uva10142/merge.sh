@@ -1,15 +1,22 @@
 #!/bin/bash
-rm -f merge.cpp
+OUTFILE=merged.cpp
+rm -f $OUTFILE
 for FILE in `ls src/*.h`; do
-  cat $FILE >> merge.cpp
+  cat $FILE >> $OUTFILE
 done
 
-echo >> merge.cpp
-echo '/* ...................... */' >> merge.cpp
-echo '/* ... Implementation ... */' >> merge.cpp
-echo '/* ...................... */' >> merge.cpp
-echo >> merge.cpp
+echo >> $OUTFILE
+echo '/* ...................... */' >> $OUTFILE
+echo '/* ... Implementation ... */' >> $OUTFILE
+echo '/* ...................... */' >> $OUTFILE
+echo >> $OUTFILE
 
 for FILE in `ls src/*.cpp`; do
-  cat $FILE | grep -v '^#include' >> merge.cpp
+  echo '/* .................................... */' >> $OUTFILE
+  echo '/* ... Copied from '$FILE' ... */' >> $OUTFILE
+  echo '/* .................................... */' >> $OUTFILE
+  cat $FILE | grep -v '^#include' >> $OUTFILE
+  echo '' >> $OUTFILE
+  echo '' >> $OUTFILE
+  echo '' >> $OUTFILE
 done

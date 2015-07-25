@@ -10,18 +10,3 @@
 #include "UVa.h"
 
 // Define and implement your data structure here.
-void People::createNewRemainingVoteList() {
-  mRemainingVoteList.push_back(std::vector<int>());
-}
-
-void People::appendRemainingVote(int Index) {
-  mRemainingVoteList.rbegin()->push_back(Index);
-}
-
-bool People::WinThanObj::operator()(const People &A, const People &B) const {
-  if (A.isRetired())
-    return false;
-  if (B.isRetired())
-    return true;
-  return A.getVoteCount() > B.getVoteCount();
-}

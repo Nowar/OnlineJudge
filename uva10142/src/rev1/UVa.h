@@ -43,5 +43,42 @@
 #endif
 
 // Define your data structure here.
+class People {
+  int mIndex = 0;
+  std::string mName;
+  bool mRetired = false;
+  std::vector <std::vector<int>> mRemainingVoteList;
+
+public:
+  People();
+  ~People();
+
+public:
+  void createNewRemainingVoteList();
+  void appendRemainingVote(int Index);
+  void setRetired() {
+    mRetired = true;
+  }
+  bool isRetired() const { return mRetired; }
+  void setName(const std::string &s) {
+    mName = s;
+  }
+  std::string getName() const { return mName; }
+  void setIndex(int i) {
+    mIndex = i;
+  }
+  int getIndex() const { return mIndex; }
+  int getVoteCount() const { return mRemainingVoteList.size(); }
+  std::vector<std::vector<int>> &getRemainingVoteList() {
+    return mRemainingVoteList;
+  }
+
+  struct WinThanObj {
+    bool operator()(const People &, const People &) const;
+  };
+
+public:
+  static int TotalPeople;
+};
 
 #endif // UVA_H
