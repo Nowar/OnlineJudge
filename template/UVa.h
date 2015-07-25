@@ -34,6 +34,14 @@
 #endif
 #endif
 
+#ifndef DEBUG
+#ifndef ONLINE_JUDGE
+#define DEBUG(expr) do { expr; } while (0)
+#else
+#define DEBUG(expr)
+#endif
+#endif
+
 // Define your data structure here.
 
 #endif // UVA_H
