@@ -9,11 +9,11 @@
 
 #include "UVa.h"
 
-static int runUVa(std::istream &is, std::ostream &os) {
+static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) noexcept {
 #ifndef ONLINE_JUDGE
   assert (argc > 1 && "We expect input from argv[1] for debugging purpose.");
   std::ifstream ifs;
