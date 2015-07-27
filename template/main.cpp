@@ -11,6 +11,7 @@
 
 static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
+  return 0;
 }
 
 int main(int argc, char **argv) noexcept {
