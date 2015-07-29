@@ -37,30 +37,28 @@ int main() {
 	createReverseTable(Table);
 	std::string InputStr;
 	while (std::getline(std::cin, InputStr)) {
-    bool IsPalindrome = true;
-    bool IsMirrored = true;
-    for (int i = 0, j = InputStr.size()-1; i<j; ++i, --j) {
-      if (InputStr[i] != InputStr[j]) {
-        IsPalindrome = false;
-        break;
-      }
-    }
-    for (int i = 0, j = InputStr.size()-1; i<=j; ++i, --j) {
-      if (InputStr[i] != Table[InputStr[j]]) {
-        IsMirrored = false;
-        break;
-      }
-    }
+		std::string ReverseStr {InputStr.rbegin(), InputStr.rend()};
+		bool IsPalindrome = (InputStr == ReverseStr);
+		std::for_each(ReverseStr.begin(), ReverseStr.end(), [&Table](char &c) {
+			c = Table[c];
+		});
+		bool IsMirrored = (InputStr == ReverseStr &&
+		                   ReverseStr.find('?') == std::string::npos);
 
 		std::cout << InputStr;
 		if (IsPalindrome && IsMirrored)
-			std::cout << " -- is a mirrored palindrome.\n\n";
+			std::cout << " -- is a mirrored palindrome.";
 		else if (IsPalindrome)
-			std::cout << " -- is a regular palindrome.\n\n";
+			std::cout << " -- is a regular palindrome.";
 		else if (IsMirrored)
-			std::cout << " -- is a mirrored string.\n\n";
+			std::cout << " -- is a mirrored string.";
 		else
-			std::cout << " -- is not a palindrome.\n\n";
-  }
-  return 0;
+			std::cout << " -- is not a palindrome.";
+
+#ifndef ONLINE_JUDGE
+		std::cout << std::endl;
+		std::cout << InputStr << " " << ReverseStr << std::endl;
+#endif
+		std::cout << std::endl << std::endl;
+	}
 }
