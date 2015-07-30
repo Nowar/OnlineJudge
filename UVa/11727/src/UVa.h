@@ -13,6 +13,7 @@
 // This is not a good behavior but it works.
 
 // C++
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <fstream>
