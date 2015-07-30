@@ -49,6 +49,14 @@
 #define REP(i, start, end)  for (int i = (int) start; i < (int) end; ++i)
 #endif
 
+#ifndef ALL
+#define ALL(x)  x.begin(), x.end()
+#endif
+
+#ifndef INPLACE_UNIQUE
+#define INPLACE_UNIQUE(x)   x.resize(std::unique(ALL(x)) - x.begin())
+#endif
+
 // Define your data structure here.
 
 #endif // UVA_H
