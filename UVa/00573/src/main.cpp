@@ -19,14 +19,17 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
     int i = 0;
     double Upper = U;
     while (++i) {
+      //os << "Climb " << Upper << "\n";
       Now += Upper;
       if (Now > Height) {
         os << "success on day " << i << "\n";
         break;
       }
-      Upper -= Weaken;
-      if (Upper < 0)  Upper == 0;
+      if (Upper - 0 < DBL_EPSILON)  Upper = 0.0;
+      else Upper -= Weaken;
       Now -= D;
+      //os << "Drop " << D << "\n";
+      //os << "Now: " << Now << "\n";
       if (Now < 0) {
         os << "failure on day " << i << "\n";
         break;

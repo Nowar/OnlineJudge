@@ -25,6 +25,7 @@
 #include <vector>
 // C
 #include <cassert>
+#include <cfloat>
 #include <cstring>
 
 #ifndef UASSERT
