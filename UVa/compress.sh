@@ -1,5 +1,5 @@
 #!/bin/bash
-DIRS=`find . -maxdepth 1 -type d | grep uva`
+DIRS=`find . -maxdepth 1 -type d | egrep '[0-9]{5}'`
 for DIR in $DIRS; do
   DIR=${DIR#./}
   echo '### Compress directory '$DIR' ###'
