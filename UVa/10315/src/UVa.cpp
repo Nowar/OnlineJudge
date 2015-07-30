@@ -81,13 +81,13 @@ void Player::compareAndPrintResult(const Player &A, const std::string &AWinStr,
   //  os << "\n";
   //     );
 
+  int AMax = A.Card[0];
+  int BMax = B.Card[0];
+  int AModMax = A.ModCard[0];
+  int BModMax = B.ModCard[0];
+
   // Straight flush
   {
-    int AMax = A.Card[0];
-    int BMax = B.Card[0];
-    int AModMax = A.ModCard[0];
-    int BModMax = B.ModCard[0];
-
     if (AModMax >=4 && BModMax >= 4 &&
         A.Card[1] == AMax-1 && A.Card[2] == AMax-2 && A.Card[3] == AMax-3 && A.Card[4] == AMax-4 &&
         B.Card[1] == BMax-1 && B.Card[2] == BMax-2 && B.Card[3] == BMax-3 && B.Card[4] == BMax-4) {
@@ -96,5 +96,42 @@ void Player::compareAndPrintResult(const Player &A, const std::string &AWinStr,
       else  os << TieStr << "\n";
       return;
     }
+  }
+
+  // Four
+  {
+    if (A.ModCard[0] == A.ModCard[3] && B.ModCard[0] == B.ModCard[3]) {
+      if (AModMax > BModMax)  os << AWinStr << "\n";
+      else if (AModMax < BModMax) os << BWinStr << "\n";
+      else  os << TieStr << "\n";
+      return;
+    }
+  }
+
+  // Full house
+  {
+    // TODO
+  }
+
+  // Flush
+  {
+    // TODO
+  }
+
+  // Straight
+  {
+    if (AModMax >=4 && BModMax >= 4 &&
+        A.ModCard[1] == AModMax-1 && A.ModCard[2] == AModMax-2 && A.ModCard[3] == AModMax-3 && A.ModCard[4] == AModMax-4 &&
+        B.ModCard[1] == BModMax-1 && B.ModCard[2] == BModMax-2 && B.ModCard[3] == BModMax-3 && B.ModCard[4] == BModMax-4) {
+      if (AModMax > BModMax)  os << AWinStr << "\n";
+      else if (AModMax < BModMax) os << BWinStr << "\n";
+      else  os << TieStr << "\n";
+      return;
+    }
+  }
+
+  // Three
+  {
+    if (A
   }
 }
