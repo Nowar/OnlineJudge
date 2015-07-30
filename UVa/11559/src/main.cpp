@@ -29,8 +29,8 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
       ss << Input;
       REP (j, 0, W) {
         ss >> R;
+        if (R >= N  && N * P < Total) Total = N * P;
       }
-      if (R >= N  && N * P < Total) Total = N * P;
     }
     if (Total == B+1) os << "stay home\n";
     else  os << Total << "\n";
