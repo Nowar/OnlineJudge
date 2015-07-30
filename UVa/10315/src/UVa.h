@@ -45,4 +45,16 @@
 
 // Define your data structure here.
 
+struct Player {
+  int Card[5];
+  int ModCard[5];
+
+  void appendCard(int i, const std::string &str);
+  void sort();
+
+  static void compareAndPrintResult(const Player &A, const std::string &AWinStr,
+                                    const Player &B, const std::string &BWinStr,
+                                    const std::string &TieStr, std::ostream &os);
+};
+
 #endif // UVA_H

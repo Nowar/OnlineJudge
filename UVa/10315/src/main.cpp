@@ -9,6 +9,9 @@
 
 #include "UVa.h"
 
+// C,D,H,S
+// 2,3,...,T,J,Q,K,A
+
 static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
   std::string Input, CardStr;
@@ -19,16 +22,18 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
     Player PlayerB, PlayerW;
     for (int i = 0; i < 5; ++i) {
       ss >> CardStr;
-      PlayerB.appendCard(CardStr);
+      PlayerB.appendCard(i, CardStr);
     }
     for (int i = 0; i < 5; ++i) {
       ss >> CardStr;
-      PlayerW.appendCard(CardStr);
+      PlayerW.appendCard(i, CardStr);
     }
-    
+
+    PlayerB.sort();
+    PlayerW.sort();
     Player::compareAndPrintResult(PlayerB, "Black wins.",
                                   PlayerW, "White wins.",
-                                  "Tie.");
+                                  "Tie.", os);
   }
   return 0;
 }
