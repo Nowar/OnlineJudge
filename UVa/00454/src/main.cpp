@@ -12,39 +12,40 @@
 static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
   std::string Input;
-  std::map<std::string, std::vector<std::string>> Anagrams;
+  std::map<std::string, std::set<std::string>> Anagrams;
   std::getline(is, Input);
   std::stringstream ss;
   ss << Input;
   int Count;  ss >> Count;
   std::getline(is, Input);
   while (Count-- > 0) {
-    while (std::getline(is, Input)) {
+    while (std::getline(is, Input), !Input.empty()) {
       std::string Pivot = Input;
       std::sort(ALL(Pivot));
       size_t pos = Pivot.find_last_of(' ');
       if (pos != std::string::npos)
         Pivot = Pivot.substr(pos+1, Pivot.size()-pos-1);
-
-      Anagrams[Pivot].push_back(Input);
-      os << "Pivot: " << Pivot << ", Input: " << Input << "\n";
+      Anagrams[Pivot].insert(Input);
     }
 
-    for (auto A : Anagrams) {
-      std::sort(ALL(A.second));
-    }
-
+    std::vector<std::string> Container;
+    Container.reserve(128);
     for (auto A : Anagrams) {
       if (A.second.size() > 1) {
-        REP (i, 0, A.second.size()) {
-          REP (j, i+1, A.second.size()) {
-            os << A.second[i] << " = " << A.second[j] << "\n";
+        std::vector<std::string> Results(A.second.begin(), A.second.end());
+        REP (i, 0, Results.size()) {
+          REP (j, i+1, Results.size()) {
+            std::string S = Results[i] + " = " + Results[j];
+            Container.push_back(S);
           }
         }
       }
     }
+    std::sort(ALL(Container));
+    for_each(ALL(Container), [&os](const std::string &S) { os << S << "\n"; });
 
     if (Count != 0) os << "\n";
+    Anagrams.clear();
   }
   return 0;
 }
