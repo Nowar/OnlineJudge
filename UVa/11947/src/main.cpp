@@ -39,18 +39,19 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
     ss << DStr; ss >> D; ss.clear();
     ss << YStr; ss >> Y;
 
+#if 1
     REP (i, 0, 280)
       stepOneDay(M, D, Y);
 
     os << std::setw(2) << std::setfill('0') << M << "/";
     os << std::setw(2) << std::setfill('0') << D << "/";
     os << std::setw(2) << std::setfill('0') << Y << " ";
-#if 0
+#else
     // The input < 1992 cannot convert to time_t, seems the implementation issue.
     auto TimeInfo = std::tm();
     TimeInfo.tm_mday = D;
     TimeInfo.tm_mon = M-1;
-    TimeInfo.tm_year = Y-1990;
+    TimeInfo.tm_year = Y-1900;
     auto Time = std::mktime(&TimeInfo);
     UASSERT (Time != -1);
 
@@ -62,7 +63,7 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
     auto *ResultInfo = std::localtime(&Time);
     M = ResultInfo->tm_mon+1;
     D = ResultInfo->tm_mday;
-    Y = ResultInfo->tm_year+1990;
+    Y = ResultInfo->tm_year+1900;
     os << std::setw(2) << std::setfill('0') << M << "/";
     os << std::setw(2) << std::setfill('0') << D << "/";
     os << std::setw(2) << std::setfill('0') << Y << " ";
