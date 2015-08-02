@@ -27,14 +27,7 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
       os << std::min(M, N) << "\n";
       break;
     case 'k': {
-      // Given input Big, Small
-      // if (Small == 1)  return Big
-      // else if (Small == 2 && Big == 2) return 4;
-      // else if (Small == 2 && Big == 3) return 4;
-      // else return (Big+1)/2 * (Small+1)/2 + Big/2 * Small/2;
-      //
-      // *** Note ***
-      // The calculation order is unspecified behavior!!
+      // Follow UVa696 algorithm. This is a litle tricky.
       int B = std::max(M, N);
       int S = std::min(M, N);
       os << ((B+1)/2) * ((S+1)/2) + (B/2) * (S/2) << "\n";
