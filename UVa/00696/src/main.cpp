@@ -29,9 +29,28 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
     // if (Small == 1)  return Big;
     // else if (Small == 2) {
     //  if (Big == 2) return 4;   // Special case
-    //  else return ((Big+1)/2)*2 // No need to care about third line,
-    //                               This makes odd Big can put one more piece.
-    //   return 4;
+    //
+    //  // The <2 x Big> is a big problem. Since it has no third line, so
+    //  // we can greedy fill it up, duplicate the upper and bottom line,
+    //  // with 2 empty within each.
+    //  //
+    //  // For example: (This is optimal combination than others)
+    //  //
+    //  // XX.  =>  4
+    //  // XX.
+    //  //
+    //  // XX.. =>  4
+    //  // XX..
+    //  //
+    //  // XX..X  =>  6 (Think about the L attack, only two lines is a special chance.)
+    //  // XX..X
+    //  //
+    //  // XX..XX..XX =>  12
+    //  // XX..XX..XX
+    //  else {
+    //    int Remainder = (Big%4)*2;
+    //    if (Big % 4 == 3) Remainder -= 2;
+    //    return (Big/4)*4 + Remainder;
     // }
     // else return (Big+1)/2 * (Small+1)/2 + Big/2 * Small/2;
     //                            // Black - white - black - ...
@@ -41,7 +60,11 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
     if (S == 1) MaxTotal = B;
     else if (S == 2) {
       if (B == 2) MaxTotal = 4;
-      else  MaxTotal = ((B+1)/2)*2;
+      else {
+        int Remainder = (B%4)*2;
+        if (B % 4 == 3) Remainder -= 2;
+        MaxTotal = (B/4)*4 + Remainder;
+      }
     }
     else  MaxTotal = ((B+1)/2) * ((S+1)/2) + (B/2) * (S/2);
 
