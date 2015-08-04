@@ -1,0 +1,46 @@
+Case 1: A+ {AB-, AB+, B-, B+} AB-
+Case 2: {AB-, AB+, B-, B+} A- AB-
+Case 3: {AB-, AB+, B-, B+} A+ AB+
+Case 4: A- {AB+, B+} AB+
+Case 5: O- IMPOSSIBLE AB-
+Case 6: O+ IMPOSSIBLE AB+
+Case 7: AB- {AB+, B+, A+} AB+
+Case 8: AB- {AB-, AB+, B-, B+, A-, A+} AB-
+Case 9: {AB-, AB+, B-, B+, A-, A+} AB+ AB+
+Case 10: {AB-, AB+, B-, B+, A-, A+} AB+ AB-
+Case 11: AB+ AB- {AB-, AB+, B-, B+, A-, A+}
+Case 12: AB+ AB+ {AB-, AB+, B-, B+, A-, A+}
+Case 13: AB- AB+ {AB-, AB+, B-, B+, A-, A+}
+Case 14: AB- AB- {AB-, B-, A-}
+Case 15: A+ A- {O-, O+, A-, A+}
+Case 16: A+ A+ {O-, O+, A-, A+}
+Case 17: A- A- {O-, A-}
+Case 18: A- A+ {O-, O+, A-, A+}
+Case 19: B+ B+ {O-, O+, B-, B+}
+Case 20: B- B- {O-, B-}
+Case 21: B- B+ {O-, O+, B-, B+}
+Case 22: B+ B- {O-, O+, B-, B+}
+Case 23: A+ B+ {O-, O+, AB-, AB+, B-, B+, A-, A+}
+Case 24: A+ B- {O-, O+, AB-, AB+, B-, B+, A-, A+}
+Case 25: A+ AB- {AB-, AB+, B-, B+, A-, A+}
+Case 26: A+ AB+ {AB-, AB+, B-, B+, A-, A+}
+Case 27: A- B+ {O-, O+, AB-, AB+, B-, B+, A-, A+}
+Case 28: A- B- {O-, AB-, B-, A-}
+Case 29: A- AB- {AB-, B-, A-}
+Case 30: A- AB+ {AB-, AB+, B-, B+, A-, A+}
+Case 31: B+ AB- {AB-, AB+, B-, B+, A-, A+}
+Case 32: B+ AB+ {AB-, AB+, B-, B+, A-, A+}
+Case 33: B+ A+ {O-, O+, AB-, AB+, B-, B+, A-, A+}
+Case 34: B+ A- {O-, O+, AB-, AB+, B-, B+, A-, A+}
+Case 35: B- AB- {AB-, B-, A-}
+Case 36: B- AB+ {AB-, AB+, B-, B+, A-, A+}
+Case 37: B- A+ {O-, O+, AB-, AB+, B-, B+, A-, A+}
+Case 38: B- A- {O-, AB-, B-, A-}
+Case 39: AB+ A- {AB-, AB+, B-, B+, A-, A+}
+Case 40: AB+ A+ {AB-, AB+, B-, B+, A-, A+}
+Case 41: AB+ B- {AB-, AB+, B-, B+, A-, A+}
+Case 42: AB+ B+ {AB-, AB+, B-, B+, A-, A+}
+Case 43: AB- A- {AB-, B-, A-}
+Case 44: AB- A+ {AB-, AB+, B-, B+, A-, A+}
+Case 45: AB- B- {AB-, B-, A-}
+Case 46: AB- B+ {AB-, AB+, B-, B+, A-, A+}

@@ -11,34 +11,31 @@
 
 static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
-  int Count;
-  is >> Count;
-  while (Count-- > 0) {
-    char C;
-    int M, N; // 4 <= M,N <= 10
-    is >> C >> M >> N;
-    UASSERT (M >= 4 && N >= 4);
-    UASSERT (M <= 10 && N <= 10);
-    switch (C) {
-    default:
-      UASSERT (0);
-      break;
-    case 'r':
-      os << std::min(M, N) << "\n";
-      break;
-    case 'k': {
-      // Follow UVa696 algorithm. This is a litle tricky.
-      int B = std::max(M, N);
-      int S = std::min(M, N);
-      os << ((B+1)/2) * ((S+1)/2) + (B/2) * (S/2) << "\n";
-      break;
-    }
-    case 'Q':
-      os << std::min(M, N) << "\n";
-      break;
-    case 'K':
-      os << ((M+1)/2) * ((N+1)/2) << "\n";
-      break;
+  int Page; // [1, 101)
+  while (is >> Page, Page != 0) {
+    int RH[50] = {};
+    int LH[50] = {};
+    int TotalPage = ((Page + 3) >> 2) << 2; // Multiple of 4
+    REP (i, 0, TotalPage/2)
+      RH[i] = i+1;
+    REP (i, TotalPage/2, TotalPage)
+      LH[TotalPage - i - 1] = i+1;
+
+    os << "Printing order for " << Page << " pages:\n";
+    for (int i = 0; i < TotalPage/2; i += 2) {
+      {
+        os << "Sheet " << i/2+1 << ", front: ";
+        int A = LH[i];  int B = RH[i];
+        if (A > Page) os << "Blank, " << B << "\n";
+        else  os << A << ", " << B << "\n";
+      }
+      {
+        int A = RH[i+1];  int B = LH[i+1];
+        if (A > Page && B > Page)  continue;
+        os << "Sheet " << i/2+1 << ", back : ";
+        if (B > Page) os << A << ", Blank\n";
+        else  os << A << ", " << B << "\n";
+      }
     }
   }
   return 0;
