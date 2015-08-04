@@ -9,11 +9,45 @@
 
 #include "UVa.h"
 
+int Roll[12*2] = {};  // 0, 1, 2, ..., 9, / => 20, X => 21, -1 means skip
+
+static int getRollScore(int RollIdx) {
+  int Score = Roll[RollIdx];
+  if (Score < 10) return Score;
+
+  if (Score == 21) {
+    UASSERT (RollIdx % 2 == 0);
+    UASSERT (Roll[RollIdx+1] == -1);
+    int NextScore = Roll[RollIdx+2];
+    if (NextScore == 21)  NextScore = 10;
+    UASSERT (NextScore <= 10 && NextScore >= 0);
+
+    int NextNextScore = Roll[RollIdx+3];
+    if (Roll[RollIdx+2] == 21)  NextNextScore = Roll[RollIdx+4];
+    if (NextNextScore == 21)  NextNextScore = 10;
+    if (NextNextScore == 20) {
+      return 10 + 10 - Roll[RollIdx+1];
+    } else {
+      UASSERT (NextNextScore <= 10 && NextNextScore >= 0);
+      return 10 + NextScore + NextNextScore - Roll[RollIdx+1];
+    }
+  }
+
+  if (Score == 20) {
+    UASSERT (RollIdx % 2);
+    int NextScore = Roll[RollIdx+1];
+    if (NextScore == 21)  NextScore = 10;
+    UASSERT (NextScore <= 10 && NextScore >= 0);
+    return 10 + NextScore - Roll[RollIdx-1];
+  }
+  return 0;
+}
+
 static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
   std::string Input;
   while (std::getline(is, Input), Input != "Game Over") {
-    int Roll[12*2] = {};  // 0, 1, 2, ..., 9, 10
+    std::fill(Roll, Roll+24, 0);
     int FrameScore[10] = {};
     std::stringstream ss;
     ss << Input;
@@ -24,20 +58,19 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
         Roll[CurRoll++] = In - '0';
       } else if (In == '/') {
         UASSERT (CurRoll % 2);
-        Roll[CurRoll] = 10 - Roll[CurRoll-1];
-        CurRoll++;
+        Roll[CurRoll++] = 20;
       } else if (std::toupper(In) == 'X') {
         UASSERT (CurRoll % 2 == 0);
-        Roll[CurRoll++] = 10;
-        Roll[CurRoll++] = 0;
+        Roll[CurRoll++] = 21;
+        Roll[CurRoll++] = -1;
       }
     }
 
 #ifndef ONLINE_JUDGE
     os << "Roll: ";
     for (int i = 0; i < 24; i += 2) {
-      if (Roll[i] == 10 && i % 2 == 0)  os << "X .\t";
-      else if (Roll[i+1] + Roll[i] == 10) os << Roll[i] << " /\t";
+      if (Roll[i] == 21)  os << "X .\t";
+      else if (Roll[i+1] == 20) os << Roll[i] << " /\t";
       else  os << Roll[i] << " " << Roll[i+1] << "\t";
     }
     os << "\n";
@@ -45,22 +78,7 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
 
     REP (i, 0, 10) {
       int FrameIdx = i * 2;
-      FrameScore[i] = Roll[FrameIdx] + Roll[FrameIdx+1];
-    }
-
-    REP (i, 0, 10) {
-      int FrameIdx = i * 2;
-      int NextFrameIdx = (i+1) * 2;
-      int NextNextFrameIdx = (i+2) * 2;
-      if (Roll[FrameIdx] == 10) { // 'X'
-        if (Roll[NextFrameIdx] == 10) { // 'X' 'X' ?
-          FrameScore[i] += 10 + Roll[NextNextFrameIdx];
-        } else {
-          FrameScore[i] += Roll[NextFrameIdx] + Roll[NextFrameIdx+1];
-        }
-      } else if (Roll[FrameIdx] + Roll[FrameIdx+1] == 10) { // '/'
-        FrameScore[i] += Roll[NextFrameIdx];
-      }
+      FrameScore[i] = getRollScore(FrameIdx) + getRollScore(FrameIdx+1);
     }
 
 #ifndef ONLINE_JUDGE
