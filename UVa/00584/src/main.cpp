@@ -12,7 +12,34 @@
 int Roll[12*2] = {};  // 0, 1, 2, ..., 9, / => 20, X => 21, -1 means skip
 
 static int getRollScore(int RollIdx) {
-  // TODO
+  int Score = Roll[RollIdx];
+  if (Score < 10) return Score;
+
+  if (Score == 21) {
+    UASSERT (RollIdx % 2 == 0);
+    UASSERT (Roll[RollIdx+1] == -1);
+    int NextScore = Roll[RollIdx+2];
+    if (NextScore == 21)  NextScore = 10;
+    UASSERT (NextScore <= 10 && NextScore >= 0);
+
+    int NextNextScore = Roll[RollIdx+3];
+    if (Roll[RollIdx+2] == 21)  NextNextScore = Roll[RollIdx+4];
+    if (NextNextScore == 21)  NextNextScore = 10;
+    if (NextNextScore == 20) {
+      return 10 + 10 - Roll[RollIdx+1];
+    } else {
+      UASSERT (NextNextScore <= 10 && NextNextScore >= 0);
+      return 10 + NextScore + NextNextScore - Roll[RollIdx+1];
+    }
+  }
+
+  if (Score == 20) {
+    UASSERT (RollIdx % 2);
+    int NextScore = Roll[RollIdx+1];
+    if (NextScore == 21)  NextScore = 10;
+    UASSERT (NextScore <= 10 && NextScore >= 0);
+    return 10 + NextScore - Roll[RollIdx-1];
+  }
   return 0;
 }
 
@@ -30,47 +57,34 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
       if (std::isdigit(In)) {
         Roll[CurRoll++] = In - '0';
       } else if (In == '/') {
-        UASSERT (CurRoll % 2 || CurRoll == 20);
+        UASSERT (CurRoll % 2);
         Roll[CurRoll++] = 20;
       } else if (std::toupper(In) == 'X') {
-        UASSERT (CurRoll % 2 == 0 || CurRoll > 18);
+        UASSERT (CurRoll % 2 == 0);
         Roll[CurRoll++] = 21;
         Roll[CurRoll++] = -1;
       }
     }
 
-#if 1
+#ifndef ONLINE_JUDGE
     os << "Roll: ";
     for (int i = 0; i < 24; i += 2) {
-      os << Roll[i] << " " << Roll[i+1] << "\t";
+      if (Roll[i] == 21)  os << "X .\t";
+      else if (Roll[i+1] == 20) os << Roll[i] << " /\t";
+      else  os << Roll[i] << " " << Roll[i+1] << "\t";
     }
     os << "\n";
 #endif
 
     REP (i, 0, 10) {
       int FrameIdx = i * 2;
-      int NextFrameIdx = (i+1) * 2;
-      int NextNextFrameIdx = (i+2) * 2;
-      if (Roll[FrameIdx] == 21) {
-        // Strike
-        int NextScore = getRollScore(NextFrameIdx);
-        int NextNextScore = getRollScore(NextFrameIdx+1);
-        if (NextScore == 10)
-          NextNextScore = getRollScore(NextNextFrameIdx);
-        FrameScore[i] = 10 + NextScore + NextNextScore;
-      } else {
-        UASSERT (Roll[FrameIdx] != -1 && Roll[FrameIdx] != 20);
-        if (Roll[FrameIdx+1] == 20)
-          FrameScore[i] = 10 + getRollScore(NextFrameIdx);
-        else
-          FrameScore[i] = getRollScore(FrameIdx) + getRollScore(FrameIdx+1);
-      }
+      FrameScore[i] = getRollScore(FrameIdx) + getRollScore(FrameIdx+1);
     }
 
-#if 1
+#ifndef ONLINE_JUDGE
     os << "Score: ";
     for (int i = 0; i < 10; ++i) {
-      os << i+1 << ": " << FrameScore[i] << "\t";
+      os << FrameScore[i] << "\t";
     }
     os << "\n";
 #endif
