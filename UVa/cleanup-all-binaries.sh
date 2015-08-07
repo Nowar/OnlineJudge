@@ -4,6 +4,6 @@ for DIR in $DIRS; do
   DIR=${DIR#./}
   echo '### Cleanup directory '$DIR' ###'
   cd $DIR > /dev/null
-  ./cleanup.sh
+  ./cleanup-binaries.sh
   cd - > /dev/null
 done
