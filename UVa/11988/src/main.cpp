@@ -13,18 +13,38 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
   std::string Input;
   while (std::getline(is , Input)) {
-    std::list<char> Results;
+    std::vector <std::string> Head;
+    std::vector <std::string> Tail;
+    Head.reserve(256);
+    Tail.reserve(256);
     bool IsFront = false;
-    auto Iter = Results.end();
-    ITERATOR_REP (i, e, Input) {
-      if (*i == '[')
-        Iter = Results.begin();
-      else if (*i == ']')
-        Iter = Results.end();
+
+    size_t Current = 0;
+    size_t Found = 0;
+    do {
+      Found = Input.find_first_of("[]", Current);
+      std::string S = Input.substr(Current, Found-Current);
+      if (IsFront)
+        Head.push_back(S);
       else
-        Results.insert(Iter, *i);
-    }
-    ITERATOR_REP (i, e, Results)
+        Tail.push_back(S);
+
+      DEBUG ( os << "Extract: " << S << "\n";);
+
+      if (Found == std::string::npos)
+        break;
+
+      if (Input[Found] == '[')
+        IsFront = true;
+      else
+        IsFront = false;
+
+      Current = Found+1;
+    } while (true);
+
+    for (auto i = Head.rbegin(), e = Head.rend(); i != e; ++i)
+      os << *i;
+    ITERATOR_REP (i, e, Tail)
       os << *i;
     os << "\n";
   }
