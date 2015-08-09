@@ -2,3 +2,7 @@
 *.gcno
 *.gcov
 gmon.out
+a.out*
+output
+error
+merged.cpp

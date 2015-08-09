@@ -11,8 +11,9 @@
 
 class RangeMaxQuery {
   vi Input;
-  vi Heap;
-  std::map<int, int> Freq;
+  vi Freq;
+  vi Start;
+  int Begin = 1;  // Temp counter for recording begin
 
 public:
   void resetSize(int N);
@@ -23,19 +24,81 @@ public:
 
 void RangeMaxQuery::resetSize(int N) {
   Input.assign(N+1, 0);
-  Heap.assign(N+1, 0);
+  Freq.assign(N+1, 0);
+  Start.assign(N+1, 0);
 }
 
 void RangeMaxQuery::setValue(int Idx, int Value) {
   Input[Idx] = Value;
-  Freq[Value]++;
+  if (Value != Input[Begin]) {
+    REP (i, Begin, Idx)
+      Freq[i] = Idx - Begin;
+    REP (i, Begin, Idx)
+      Start[i] = Begin;
+    Begin = Idx;
+  }
 }
 
 void RangeMaxQuery::buildHeap() {
-  // TODO
+  REP (i, Begin, Input.size())
+    Freq[i] = Input.size() - Begin;
+  REP (i, Begin, Input.size())
+    Start[i] = Begin;
+  DUMP_ALL (std::cerr, Input);
+  DUMP_ALL (std::cerr, Freq);
+  DUMP_ALL (std::cerr, Start);
 }
 int RangeMaxQuery::query(int Begin, int End, bool Inclusive) {
-  // TODO
+  DEBUG (std::cerr << "query: [" << Begin << ", " << End << "]\n";);
+
+  UASSERT (Inclusive);
+  UASSERT (Begin >= 1 && Begin < Input.size());
+  UASSERT (End >= 1 && End < Input.size());
+
+  if (Begin > End)
+    return 0;
+
+  if (Input[Begin] == Input[End]) { // Fully in the same region
+    return End - Begin + 1;
+  }
+
+  int Max = 0;
+  if (Start[Begin] != Begin) {  // Partial head
+    int Tail = Start[Begin] + Freq[Begin] - 1;
+    UASSERT (Input[Begin] == Input[Tail]);
+    int HeadMax = query(Begin, Tail);
+    Max = std::max(Max, HeadMax);
+    DEBUG (std::cerr << "Update max: " << Max << "\n";);
+    Begin = Tail + 1;
+    DEBUG (std::cerr << "New Begin: " << Begin << "\n";);
+  }
+
+  if (Start[End] + Freq[End] - 1 != End) {  // Partial tail
+    int Head = Start[End];
+    UASSERT (Input[Head] == Input[End]);
+    int TailMax = query(Head, End);
+    Max = std::max(Max, TailMax);
+    DEBUG (std::cerr << "Update max: " << Max << "\n";);
+    End = Head - 1;
+    DEBUG (std::cerr << "New End: " << End << "\n";);
+  }
+
+  if (Begin > End)
+    return Max;
+
+  UASSERT (End == Start[End] + Freq[End] - 1);
+  UASSERT (Begin == Start[Begin]);
+  int Middle = (Begin + End) / 2;
+  Middle = Start[Middle] + Freq[Middle] - 1;  // Align middle to the range last.
+  DEBUG (std::cerr << "Middle: " << Middle << "\n";);
+  if (Middle == End && Middle != Begin)
+    Middle = Start[Middle] - 1; // Get rid of infinite loop
+  DEBUG (std::cerr << "Middle: " << Middle << "\n";);
+  Max = std::max(Max, query(Begin, Middle));
+  DEBUG (std::cerr << "Update left-half max: " << Max << "\n";);
+  Max = std::max(Max, query(Middle + 1, End));
+  DEBUG (std::cerr << "Update right-half max: " << Max << "\n";);
+  return Max;
 }
 
 
