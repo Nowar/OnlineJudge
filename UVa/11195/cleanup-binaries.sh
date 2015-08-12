@@ -1,3 +1,5 @@
 #!/bin/bash
-rm -f a.out output error
-rm -f merge.cpp
+rm -rf a.out* output error
+rm -f merged.cpp
+rm -f *.gcov
+rm -f *.gcda
