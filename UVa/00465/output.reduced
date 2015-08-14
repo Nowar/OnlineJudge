@@ -1,0 +1,10 @@
+2147483647 * 1
+2147483647 + 1
+result too big
+0 * 1000000000000
+second number too big
+2147483648 * 0
+first number too big
+2147483648 * 1
+first number too big
+result too big
