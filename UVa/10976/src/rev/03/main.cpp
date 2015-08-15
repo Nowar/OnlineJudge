@@ -15,26 +15,19 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
   while (is >> K) {
     std::vector<std::string> Result;
     Result.reserve(32);
-    double RealK = (double) 1 / K;
     for (int64_t Y = K+1; Y != 2*K+1; ++Y) {
-      double RealY = (double) 1 / Y;
-      int64_t X = 1 / (RealK - RealY);
-      auto Val = (X*Y) / (X+Y);
-      auto Mod = (X*Y) % (X+Y);
-      if (Mod == 0 && Val == K) {
-        std::stringstream ss;
-        ss << "1/" << K << " = 1/" << X << " + 1/" << Y;
-        Result.push_back(ss.str());
-        continue;
-      }
-
-      Val = ((X+1)*Y) / ((X+1)+Y);
-      Mod = ((X+1)*Y) % ((X+1)+Y);
-      if (Mod == 0 && Val == K) {
-        std::stringstream ss;
-        ss << "1/" << K << " = 1/" << X+1 << " + 1/" << Y;
-        Result.push_back(ss.str());
-        continue;
+      for (int64_t X = Y; ; ++X) {
+        auto Up = X*Y;
+        auto Down = X+Y;
+        auto Val = Up / Down;
+        if (Val == K && Val * Down == Up) {
+          std::stringstream ss;
+          ss << "1/" << K << " = 1/" << X << " + 1/" << Y;
+          Result.push_back(ss.str());
+          break;
+        }
+        if (Val > K)
+          break;
       }
     }
 
