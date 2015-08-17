@@ -9,10 +9,31 @@
 
 #include "UVa.h"
 
+#define NUM_ROW   52
+#define NUM_COL   1000000
+int Refs[NUM_ROW][NUM_COL];
+
+static int getRowIdx(char C) {
+  UASSERT (std::isalpha(C));
+  if (C > 'Z')
+    C -= 'a' - 'Z' - 1;
+  return C - 'A';
+}
+
 static int runUVa(std::istream &is, std::ostream &os) noexcept {
   // Implement here.
   std::string Ref;
   std::getline(is, Ref);
+
+  std::fill(&Refs[0][0], &Refs[NUM_ROW-1][NUM_COL-1]+1, NUM_COL);
+  int CurRow[NUM_ROW] = {};
+  REP (i, 0, Ref.size()) {
+    char C = Ref[i];
+    int RowIdx = getRowIdx(C);
+    int ColIdx = CurRow[RowIdx]++;
+    Refs[RowIdx][ColIdx] = i;
+  }
+
   int N;
   is >> N;
   std::string Input;
@@ -20,25 +41,28 @@ static int runUVa(std::istream &is, std::ostream &os) noexcept {
   while (N-- > 0) {
     std::getline(is, Input);
 
-    size_t InputI = 0, RefI = 0;
-    size_t FirstI = Input.size();
-    for (size_t InputE = Input.size(), RefE = Ref.size();
-         InputI < InputE && RefI < RefE; ) {
-      if (Input[InputI] == Ref[RefI]) {
-        if (FirstI == InputE)
-          FirstI = RefI;
-        InputI++;
-        RefI++;
-        continue;
+    size_t InputI = 0;
+    size_t FirstI = (size_t) -1;
+    size_t LastI = 0;
+    bool Succeed = true;
+    for ( ; InputI != Input.size(); ++InputI) {
+      auto C = Input[InputI];
+      auto Idx = getRowIdx(C);
+      auto RetIdx = std::lower_bound(&Refs[Idx][0], &Refs[Idx][NUM_COL-1]+1, LastI);
+      if (RetIdx == &Refs[Idx][NUM_COL-1]+1 ||
+          *RetIdx == NUM_COL) {
+        Succeed = false;
+        break;
       }
-      RefI++;
+      LastI = *RetIdx + 1;
+      if (FirstI == (size_t) -1)
+        FirstI = LastI;
     }
 
-    if (InputI != Input.size()) {
+    if (!Succeed)
       os << "Not matched\n";
-    } else {
-      os << "Matched " << FirstI << " " << RefI-1 << "\n";
-    }
+    else
+      os << "Matched " << FirstI-1 << " " << LastI-1 << "\n";
   }
   return 0;
 }
